@@ -20,7 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
-urlpatterns = [
+urlpatterns = ([
     path('admin/', admin.site.urls),
-    path('', include("products.urls", namespace='products'))
-]+static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+    path('', include("dogs.urls", namespace='dogs'))]
++ static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT))
