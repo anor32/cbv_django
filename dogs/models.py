@@ -1,3 +1,31 @@
+
+
 from django.db import models
 
-# Create your models here.
+
+from users.models import NULLABLE
+
+
+class Bread(models.Model):
+    name = models.CharField(max_length=100,verbose_name='breed')
+    description = models.CharField(max_length=1000,verbose_name='descriptins',*NULLABLE)
+
+    def __str__(self):
+        return f'{self.name}'
+
+    class Meta:
+        verbose_name = 'breed'
+        verbose_name_plural = 'breeds'
+
+class Dog(models.Model):
+    name = models.CharField(max_length=250, verbose_name='dog name')
+    breed = models.ForeignKey(Bread,on_delete=models.CASCADE,verbose_name="breed")
+    photo = models.ImageField(upload_to='dogs/',**NULLABLE,verbose_name="image")
+    bitrh_date = models.DateField(**NULLABLE,verbose_name="birth_date")
+
+    def __str__(self):
+        return f'{self.name} ({self.breed})'
+
+    class Meta:
+        verbose_name = 'dog'
+        verbose_name_plural = "dogs"

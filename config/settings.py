@@ -145,8 +145,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = (
     BASE_DIR/ 'static',
 )
-# по идеее мне media root не нужен у меня пользователи не должны загружать свои фотки
-# или под пользователями имеется ввиду админ и модер тоже
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = (
     BASE_DIR / 'media'
