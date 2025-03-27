@@ -73,7 +73,7 @@ def dog_update_view(request,pk):
             dog_object.save()
             return HttpResponseRedirect(reverse('dogs:dog_detail', args={pk: pk}))
     context = {
-        'object': dog_object,
+        'objects_list': dog_object,
         'form': DogForm(instance=dog_object)
     }
     return render(request,'dogs/update.html',context)
@@ -84,5 +84,5 @@ def dog_delete_view(request,pk):
         dog_object.delete()
         return HttpResponseRedirect(reverse('dogs:dogs_list'))
     context = {
-        'object': dog_object,}
+        'objects_list': dog_object,}
     return render(request,'dogs/delete.html',context)
