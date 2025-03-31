@@ -3,7 +3,7 @@ from django.shortcuts import render , get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from dogs.models import Breed, Dog
-from forms import DogForm
+from dogs.forms import DogForm
 from django.contrib.auth.decorators import login_required
 # Create your views here
 def index(request):
