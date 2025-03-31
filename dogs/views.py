@@ -1,9 +1,10 @@
+
 from django.shortcuts import render , get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from dogs.models import Breed, Dog
 from forms import DogForm
-
+from django.contrib.auth.decorators import login_required
 # Create your views here
 def index(request):
     context = {
@@ -70,6 +71,7 @@ def dog_update_view(request,pk):
     }
     return render(request,'dogs/update.html',context)
 
+@login_required
 def dog_delete_view(request,pk):
     dog_object = get_object_or_404(Dog, pk =pk)
     if request.method ==  'POST':

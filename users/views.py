@@ -3,7 +3,7 @@ from logging import exception
 from django.shortcuts import render, reverse, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout, user_logged_out
-
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 from users.forms import UserRegisterForm, UserLoginForm
@@ -49,7 +49,7 @@ def user_login_view(request):
     }
     return render(request, "users/users_login.html", context=context)
 
-
+@login_required
 def user_profile_view(request):
     user_object = request.user
     if user_object.first_name:
