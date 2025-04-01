@@ -10,9 +10,11 @@ class User(AbstractUser):
     email = models.EmailField(unique= True, verbose_name="Эл. почта")
     phone = models.CharField(max_length=35,verbose_name="Телефон", **NULLABLE)
     first_name = models.CharField(max_length=150, verbose_name="имя", default = "Anonymous")
-    last_name = models.CharField(max_length=150, verbose_name="фамилия")
-    telegram = models.CharField(max_length=150,verbose_name="telegram username", **NULLABLE)
-    date_birth = models.DateField(verbose_name="date birth", **NULLABLE)
+    last_name = models.CharField(max_length=150, verbose_name="фамилия",default = "Anonymous")
+    telegram = models.CharField(max_length=150,verbose_name="Телеграмм", **NULLABLE)
+    avatar = models.ImageField(upload_to='users/',verbose_name="Аватар",**NULLABLE)
+    date_birth = models.DateField(verbose_name="Дата Рождения", **NULLABLE)
+
     is_active = models.BooleanField(default=True, verbose_name="activ")
 
     USERNAME_FIELD = 'email'
