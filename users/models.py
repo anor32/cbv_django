@@ -14,7 +14,6 @@ class User(AbstractUser):
     telegram = models.CharField(max_length=150,verbose_name="Телеграмм", **NULLABLE)
     avatar = models.ImageField(upload_to='users/',verbose_name="Аватар",**NULLABLE)
     date_birth = models.DateField(verbose_name="Дата Рождения", **NULLABLE)
-
     is_active = models.BooleanField(default=True, verbose_name="activ")
 
     USERNAME_FIELD = 'email'
