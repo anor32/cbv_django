@@ -1,3 +1,6 @@
+import random
+import string
+
 from django.shortcuts import render, reverse, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout, user_logged_out, update_session_auth_hash
@@ -5,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib import messages
 from users.forms import UserRegisterForm, UserLoginForm, StyleFromMixin, UserUpdateForm, UserPasswordChangeForm
+from users.servises import send_new_password, send_register_email
 
 
 def user_register_view(request):
@@ -14,12 +18,13 @@ def user_register_view(request):
             new_user = form.save()
             new_user.set_password(form.cleaned_data['password'])
             new_user.save()
-            return HttpResponseRedirect(reverse('users/users_login'))
+            #времено закоментировано проверить через 2 часа
+            # send_register_email(new_user.email)
+            return HttpResponseRedirect(reverse('users:user_login'))
     context = {
         'title': 'Создать аккаунт',
         'form': UserRegisterForm
     }
-
     return render(request, 'users/user_register.html', context=context)
 
 
@@ -29,15 +34,13 @@ def user_login_view(request):
         if form.is_valid():
             cd = form.cleaned_data
             user = authenticate(email=cd['email'], password=cd['password'])
-
             if user is not None:
                 if user.is_active:
                     login(request, user)
                     return HttpResponseRedirect(reverse('dogs:index'))
-                else:
-                    return HttpResponse('Аккаунт Неактивен!')
-            else:
-                print("Неверное имя пользователя или пароль")
+            return HttpResponse('Вы не пройдете пока не получите бумаги !')
+
+
 
     context = {
         'title': "Вход в аккаунт",
@@ -101,3 +104,13 @@ def user_change_password_view(request):
             'form': form
     }
     return render(request, 'users/user_change_password.html', context)
+
+
+@login_required
+def user_generate_new_passport_view(request):
+    new_password = ''.join(random.sample((string.ascii_letters+string.digits),12))
+    request.user.set_password(new_password)
+    request.user.save()
+    #времено закоментировано проверить часа через 2
+   # send_new_password(request.user.email,new_password)
+    return redirect(reverse('dogs:index'))

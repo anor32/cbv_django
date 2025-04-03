@@ -138,8 +138,6 @@ USE_TZ = True
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'users.User'
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = (
@@ -150,3 +148,21 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = (
     BASE_DIR / 'media'
 )
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'users.User'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIl_HOST = 'smtp.yandex.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'andor231@yandex.ru'
+EMAIL_HOST_PASSWORD = os.getenv('YANDEX_PASSWORD')
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+EMAIL_SERVER = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_ADMIN = EMAIL_HOST_USER
+
+
