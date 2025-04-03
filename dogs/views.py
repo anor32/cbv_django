@@ -39,16 +39,18 @@ def dogs_list_view(request):
     }
     return render(request, 'dogs/dogs.html', context)
 
-
+@login_required
 def dog_create_view(request):
     if request.method == "POST":
         form = DogForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            dog_object = form.save()
+            dog_object.owner = request.user
+            dog_object.save()
             return HttpResponseRedirect(reverse('dogs:dogs_list'))
     return render(request,'dogs/create.html',{'form':DogForm()})
 
-
+@login_required
 def dog_detail_view(request,pk):
     dog_object = Dog.objects.get(pk=pk)
     context = {
