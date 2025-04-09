@@ -1,6 +1,7 @@
 from PIL.ImageFilter import DETAIL
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render , get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.template.context_processors import request
 from django.urls import reverse, reverse_lazy
 from dogs.models import Breed, Dog
@@ -24,7 +25,7 @@ def breeds_list_view(request):
     }
     return render(request, "dogs/breeds.html", context)
 
-
+#
 def breeds_dogs_list_view(request, pk: int):
     breed_item = Breed.objects.get(pk=pk)
     context = {
@@ -43,12 +44,12 @@ class DogListView(ListView):
     }
     template_name = 'dogs/dogs.html'
 
-# def dogs_list_view(request):
-#     context = {
-#         'objects_list': Dog.objects.all(),
-#         'title': 'Питомник - Все наши собаки'
-#     }
-#     return render(request, 'dogs/dogs.html', context)
+def dogs_list_view(request):
+    context = {
+        'objects_list': Dog.objects.all(),
+        'title': 'Питомник - Все наши собаки'
+    }
+    return render(request, 'dogs/dogs.html', context)
 
 
 # def dog_create_view(request):
@@ -60,7 +61,7 @@ class DogListView(ListView):
 #             dog_object.save()
 #             return HttpResponseRedirect(reverse('dogs:dogs_list'))
 #     return render(request,'dogs/create.html',{'form':DogForm()})
-class DogCreateView(CreateView):
+class DogCreateView(LoginRequiredMixin,CreateView):
     model = Dog
     form_class = DogForm
     template_name = 'dogs/create_update.html'
@@ -69,8 +70,13 @@ class DogCreateView(CreateView):
     }
     success_url = reverse_lazy('dogs:dogs_list')
 
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.owner = self.request.user
+        return super().form_valid(form)
 
-class DogDetailView(DetailView):
+
+class DogDetailView( DetailView):
     model = Dog
     template_name = 'dogs/detail.html'
     context_object_name = 'object'
@@ -90,7 +96,7 @@ class DogDetailView(DetailView):
 #     return render(request,'dogs/detail.html',context)
 
 
-class DogUpdateView(UpdateView):
+class DogUpdateView(LoginRequiredMixin,UpdateView):
     model = Dog
     form_class = DogForm
     template_name = 'dogs/create_update.html'
@@ -99,6 +105,14 @@ class DogUpdateView(UpdateView):
     }
     def get_success_url(self):
         return reverse('dogs:dog_detail',args=[self.kwargs.get('pk')])
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        if self.object.owner != self.request.user and not self.request.user.is_staff:
+            raise Http404
+        return self.object.owner
+
+
 # def dog_update_view(request,pk):
 #     dog_object = get_object_or_404(Dog,pk=pk)
 #     if request.method =="POST":
@@ -114,7 +128,7 @@ class DogUpdateView(UpdateView):
 #     return render(request,'dogs/update.html',context)
 
 
-class DogDeleteView(DeleteView):
+class DogDeleteView(LoginRequiredMixin,DeleteView):
     model = Dog
     template_name = 'dogs/'
     extra_context = {
