@@ -151,7 +151,9 @@ MEDIA_ROOT = (
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.User'
-
+LOGIN_REDIRECT_URL = 'dogs:index'
+# LOGOUT_REDIRECT_URL = 'dogs:index'
+LOGIN_URL = '/users/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIl_HOST = 'smtp.yandex.com'
