@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from dogs.models import Breed, Dog
 from dogs.forms import DogForm
-
+from django.views.generic import  ListView, CreateView, UpdateView,DeleteView
 # Create your views here
 def index(request):
     context = {
@@ -32,12 +32,20 @@ def breeds_dogs_list_view(request, pk: int):
     return render(request, 'dogs/dogs.html', context)
 
 
-def dogs_list_view(request):
-    context = {
-        'objects_list': Dog.objects.all(),
-        'title': 'Питомник - Все наши собаки'
+class DogListView(ListView):
+    model = Dog
+    extra_context = {
+        'title': 'Питомник - Все наши породы'
+
     }
-    return render(request, 'dogs/dogs.html', context)
+    template_name = 'dogs/dogs.html'
+
+# def dogs_list_view(request):
+#     context = {
+#         'objects_list': Dog.objects.all(),
+#         'title': 'Питомник - Все наши собаки'
+#     }
+#     return render(request, 'dogs/dogs.html', context)
 
 
 def dog_create_view(request):
