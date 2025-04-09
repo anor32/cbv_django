@@ -1,10 +1,13 @@
-
+from PIL.ImageFilter import DETAIL
 from django.shortcuts import render , get_object_or_404
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.template.context_processors import request
+from django.urls import reverse, reverse_lazy
 from dogs.models import Breed, Dog
 from dogs.forms import DogForm
-from django.views.generic import  ListView, CreateView, UpdateView,DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+
+
 # Create your views here
 def index(request):
     context = {
@@ -48,38 +51,67 @@ class DogListView(ListView):
 #     return render(request, 'dogs/dogs.html', context)
 
 
-def dog_create_view(request):
-    if request.method == "POST":
-        form = DogForm(request.POST, request.FILES)
-        if form.is_valid():
-            dog_object = form.save()
-            dog_object.owner = request.user
-            dog_object.save()
-            return HttpResponseRedirect(reverse('dogs:dogs_list'))
-    return render(request,'dogs/create.html',{'form':DogForm()})
-
-
-def dog_detail_view(request,pk):
-    dog_object = Dog.objects.get(pk=pk)
-    context = {
-        'object': dog_object,
-        'title': f'вы выбрали {dog_object.name}, Порода {dog_object.breed.name}'
+# def dog_create_view(request):
+#     if request.method == "POST":
+#         form = DogForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             dog_object = form.save()
+#             dog_object.owner = request.user
+#             dog_object.save()
+#             return HttpResponseRedirect(reverse('dogs:dogs_list'))
+#     return render(request,'dogs/create.html',{'form':DogForm()})
+class DogCreateView(CreateView):
+    model = Dog
+    form_class = DogForm
+    template_name = 'dogs/create_update.html'
+    extra_context = {
+        'title':'Добавить собаку'
     }
-    return render(request,'dogs/detail.html',context)
+    success_url = reverse_lazy('dogs:dogs_list')
 
-def dog_update_view(request,pk):
-    dog_object = get_object_or_404(Dog,pk=pk)
-    if request.method =="POST":
-        form = DogForm(request.POST, request.FILES, instance=dog_object)
-        if form.is_valid():
-            dog_object = form.save()
-            dog_object.save()
-            return HttpResponseRedirect(reverse('dogs:dog_detail', args={pk: pk}))
-    context = {
-        'objects_list': dog_object,
-        'form': DogForm(instance=dog_object)
+
+class DogDetailView(DetailView):
+    model = Dog
+    template_name = 'dogs/detail.html'
+    context_object_name = 'object'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        dog_object = self.get_object()
+        context['title'] = f'вы выбрали {dog_object.name}, Порода {dog_object.breed.name}'
+        return context
+
+
+# def dog_detail_view(request,pk):
+#     dog_object = Dog.objects.get(pk=pk)
+#     context = {
+#         'object': dog_object,
+#         'title': f'вы выбрали {dog_object.name}, Порода {dog_object.breed.name}'
+#     }
+#     return render(request,'dogs/detail.html',context)
+
+
+class DogUpdateView(UpdateView):
+    model = Dog
+    form_class = DogForm
+    template_name = 'dogs/create_update.html'
+    extra_context = {
+        'title': f'Изменить собаку'
     }
-    return render(request,'dogs/update.html',context)
+    def get_success_url(self):
+        return reverse('dogs:dog_detail',args=[self.kwargs.get('pk')])
+# def dog_update_view(request,pk):
+#     dog_object = get_object_or_404(Dog,pk=pk)
+#     if request.method =="POST":
+#         form = DogForm(request.POST, request.FILES, instance=dog_object)
+#         if form.is_valid():
+#             dog_object = form.save()
+#             dog_object.save()
+#             return HttpResponseRedirect(reverse('dogs:dog_detail', args={pk: pk}))
+#     context = {
+#         'objects_list': dog_object,
+#         'form': DogForm(instance=dog_object)
+#     }
+#     return render(request,'dogs/update.html',context)
 
 
 def dog_delete_view(request,pk):
