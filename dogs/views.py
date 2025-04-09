@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from dogs.models import Breed, Dog
 from dogs.forms import DogForm
-from django.contrib.auth.decorators import login_required
+
 # Create your views here
 def index(request):
     context = {
@@ -39,7 +39,7 @@ def dogs_list_view(request):
     }
     return render(request, 'dogs/dogs.html', context)
 
-@login_required
+
 def dog_create_view(request):
     if request.method == "POST":
         form = DogForm(request.POST, request.FILES)
@@ -50,7 +50,7 @@ def dog_create_view(request):
             return HttpResponseRedirect(reverse('dogs:dogs_list'))
     return render(request,'dogs/create.html',{'form':DogForm()})
 
-@login_required
+
 def dog_detail_view(request,pk):
     dog_object = Dog.objects.get(pk=pk)
     context = {
@@ -73,7 +73,7 @@ def dog_update_view(request,pk):
     }
     return render(request,'dogs/update.html',context)
 
-@login_required
+
 def dog_delete_view(request,pk):
     dog_object = get_object_or_404(Dog, pk =pk)
     if request.method ==  'POST':
