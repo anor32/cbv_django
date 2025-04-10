@@ -43,5 +43,5 @@ class DogParent(models.Model):
         return f'{self.name} ({self.breed})'
 
     class Meta:
-        verbose_name = 'parrent'
-        verbose_name_plural = 'parrents'
+        verbose_name = 'parent'
+        verbose_name_plural = 'parents'
