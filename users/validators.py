@@ -1,8 +1,13 @@
 import re
+
+from django.conf import settings
 from django.core.exceptions import ValidationError
+
+
 
 def validate_password(filed):
     pattern = re.compile(r'^[A-Za-z0-9]+$')
+    language= settings.LANGUAGE_CODE
     error_messages  =[
         {
             'ru-ru':'Пароль должен содержать только символы латинского алфавита и цифры!',
