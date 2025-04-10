@@ -1,1 +1,68 @@
-[{"model": "users.user", "pk": 1, "fields": {"password": "pbkdf2_sha256$720000$bIss65gfTB1XyuTcElWp1P$rNV+CqNkD0H5Jc2Ds7v/i9/+QhtgLqxuvRFiCAWHjFo=", "last_login": "2025-03-25T15:09:54.996Z", "is_superuser": true, "username": "", "first_name": "Andrei", "last_name": "Nikanov", "is_staff": true, "date_joined": "2025-03-25T14:28:53.285Z", "email": "admin@web.top", "phone": null, "telegram": null, "date_birth": "2000-04-30", "is_active": true, "groups": [], "user_permissions": []}}]
+[
+  {
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$yXJWqJH0TOn6iY7kt0woYU$XSXiuSWaUsJg5rCJvwPHjH8N1TxcRV4IZ7PRbX1IEaI=",
+      "last_login": "2025-04-10T10:54:32.077Z",
+      "is_superuser": true,
+      "is_staff": true,
+      "date_joined": "2025-03-30T17:27:54.134Z",
+      "username": "",
+      "email": "admin@web.top",
+      "phone": null,
+      "first_name": "Andrei",
+      "last_name": "Nikanov",
+      "telegram": null,
+      "avatar": "",
+      "date_birth": null,
+      "is_active": true,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 17,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$LPsOaNkD3qK1TtdIG1NoQz$d6Tkr3ezxvERwvMT6nZwQx5EUeRZtlD9rmFsiRoIGK8=",
+      "last_login": "2025-04-01T08:02:01.165Z",
+      "is_superuser": false,
+      "is_staff": false,
+      "date_joined": "2025-04-01T08:01:30.500Z",
+      "username": null,
+      "email": "user10@mail.ru",
+      "phone": "+8911233333",
+      "first_name": "Антон",
+      "last_name": "Палкин",
+      "telegram": null,
+      "avatar": "",
+      "date_birth": null,
+      "is_active": true,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 38,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$q76qHNyrbcac7MOnvnsvDq$9wd0I3G5pYjqte4wfmxQMClmr/3CyqBVE6a4jCkHpJA=",
+      "last_login": null,
+      "is_superuser": false,
+      "is_staff": false,
+      "date_joined": "2025-04-10T10:56:28.096Z",
+      "username": null,
+      "email": "fyfer23@mail.ru",
+      "phone": null,
+      "first_name": "Anonymous",
+      "last_name": "Anonymous",
+      "telegram": null,
+      "avatar": "",
+      "date_birth": null,
+      "is_active": true,
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]
