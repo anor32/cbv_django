@@ -156,7 +156,7 @@ LOGIN_REDIRECT_URL = 'dogs:index'
 LOGIN_URL = '/users/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIl_HOST = 'smtp.yandex.com'
+EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'andor231@yandex.ru'
 EMAIL_HOST_PASSWORD = os.getenv('YANDEX_PASSWORD')

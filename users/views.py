@@ -88,6 +88,6 @@ def user_generate_new_passport_view(request):
     new_password = ''.join(random.sample((string.ascii_letters + string.digits), 12))
     request.user.set_password(new_password)
     request.user.save()
-    # времено закоментировано проверить часа через 2
-    # send_new_password(request.user.email,new_password)
+
+    send_new_password(request.user.email,new_password)
     return redirect(reverse('dogs:index'))
