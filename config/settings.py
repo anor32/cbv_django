@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
-
+from django.conf.global_settings import CACHES
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -154,6 +154,16 @@ AUTH_USER_MODEL = 'users.User'
 LOGIN_REDIRECT_URL = 'dogs:index'
 # LOGOUT_REDIRECT_URL = 'dogs:index'
 LOGIN_URL = '/users/'
+
+CACHE_ENABLED = os.getenv('CACHE_ENABLED') == 'True'
+if CACHE_ENABLED:
+    CACHES = {
+        'default':{
+            'BACKEND':'django.core.cache.backends.redis.RedisCache',
+            'LOCATION':os.getenv('CACHE_LOCATION'),
+        }
+    }
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.ru'
