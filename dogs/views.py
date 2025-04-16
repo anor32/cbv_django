@@ -2,7 +2,7 @@ from lib2to3.fixes.fix_input import context
 
 from PIL.ImageFilter import DETAIL
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect, Http404
 
 from django.forms import inlineformset_factory
@@ -11,6 +11,8 @@ from django.urls import reverse, reverse_lazy
 from dogs.models import Breed, Dog, DogParent
 from dogs.forms import DogForm, DogParentForm
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+
+from users.models import UserRoles
 
 
 # Create your views here
@@ -22,23 +24,31 @@ def index(request):
     return render(request, "dogs/index.html", context)
 
 
-def breeds_list_view(request):
-    context = {
-        'object_list': Breed.objects.all(),
-        'title': 'Питомник - Все наши породы'
+class DogBreedListView(LoginRequiredMixin,ListView):
+    model = Dog
+    template_name = 'dogs/dogs.html'
+    extra_context = {
+        'title': 'Cобаки выбранной породы'
     }
-    return render(request, "dogs/breeds.html", context)
+    def get_queryset(self):
+        queryset = super().get_queryset().filter(breed_id= self.kwargs.get('pk'))
+        return queryset
 
 
-#
-def breeds_dogs_list_view(request, pk: int):
-    breed_item = Breed.objects.get(pk=pk)
-    context = {
-        'object_list': Dog.objects.filter(breed_id=pk),
-        'title': f'Cобаки породы - {breed_item.name}',
-        'breed_pk': breed_item.pk,
+class BreedListView(LoginRequiredMixin,ListView):
+    model = Breed
+    extra_context = {
+        'title':"Все наши породы"
     }
-    return render(request, 'dogs/dogs.html', context)
+    template_name = 'dogs/breeds.html'
+# def breeds_dogs_list_view(request, pk: int):
+#     breed_item = Breed.objects.get(pk=pk)
+#     context = {
+#         'object_list': Dog.objects.filter(breed_id=pk),
+#         'title': f'Cобаки породы - {breed_item.name}',
+#         'breed_pk': breed_item.pk,
+#     }
+#     return render(request, 'dogs/dogs.html', context)
 
 
 class DogListView(ListView):
@@ -48,25 +58,26 @@ class DogListView(ListView):
 
     }
     template_name = 'dogs/dogs.html'
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(is_active = True)
+        return queryset
 
-
-def dogs_list_view(request):
-    context = {
-        'object_list': Dog.objects.all(),
-        'title': 'Питомник - Все наши собаки'
+class DogDeactivatedListView(LoginRequiredMixin,ListView):
+    model = Dog
+    extra_context = {
+        'title': "Питомник - неактивыне собаки"
     }
-    return render(request, 'dogs/dogs.html', context)
+    template_name = "dogs/dogs.html"
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.role in [UserRoles.MODERATOR, UserRoles.ADMIN]:
+            queryset = queryset.filter(is_active= False)
+        if self.request.user.role == UserRoles.USER:
+            queryset = queryset.filter(is_active=False, owner= self.request.user)
+        return queryset
 
-# def dog_create_view(request):
-#     if request.method == "POST":
-#         form = DogForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             dog_object = form.save()
-#             dog_object.owner = request.user
-#             dog_object.save()
-#             return HttpResponseRedirect(reverse('dogs:dogs_list'))
-#     return render(request,'dogs/create.html',{'form':DogForm()})
 class DogCreateView(LoginRequiredMixin, CreateView):
     model = Dog
     form_class = DogForm
@@ -141,3 +152,12 @@ class DogDeleteView(LoginRequiredMixin, DeleteView):
         'title': "удалить собаку"
     }
     success_url = reverse_lazy("dogs:dogs_list")
+
+def toggle_activity(request, pk):
+    dog_item = get_object_or_404(Dog,pk=pk)
+    if dog_item.is_active:
+        dog_item.is_active = False
+    else:
+        dog_item.is_active = True
+    dog_item.save()
+    return redirect(reverse("dogs:dogs_list"))

@@ -11,8 +11,7 @@ from django.views.generic import CreateView, UpdateView
 from django.urls import reverse_lazy
 
 from users.models import User
-from users.forms import UserRegisterForm, UserLoginForm, StyleFromMixin, UserUpdateForm, UserPasswordChangeForm, \
-    UserForm
+from users.forms import UserRegisterForm, UserLoginForm, StyleFromMixin, UserUpdateForm, UserPasswordChangeForm,UserForm
 from users.servises import send_new_password, send_register_email
 
 
