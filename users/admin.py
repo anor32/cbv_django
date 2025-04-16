@@ -6,5 +6,5 @@ from users.models import User
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("last_name","first_name","pk")
+    list_display = ("pk","email","last_name","first_name","role","is_active")
     last_filter = ("last_name",)
