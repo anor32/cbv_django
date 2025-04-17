@@ -1,17 +1,21 @@
 import random
 import string
+from collections import UserList
 
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, reverse, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout, user_logged_out, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.views import LoginView, PasswordChangeView, LogoutView
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, ListView
 from django.urls import reverse_lazy
 
 from users.models import User
-from users.forms import UserRegisterForm, UserLoginForm, StyleFromMixin, UserUpdateForm, UserPasswordChangeForm,UserForm
+from users.forms import UserRegisterForm, UserLoginForm, StyleFromMixin, UserUpdateForm, UserPasswordChangeForm, \
+    UserForm
 from users.servises import send_new_password, send_register_email
 
 
@@ -21,14 +25,13 @@ class UserRegisterView(CreateView):
     success_url = reverse_lazy('dogs:index')
     template_name = 'users/user_register.html'
     extra_context = {
-            'title': 'Создать аккаунт',
-        }
+        'title': 'Создать аккаунт',
+    }
 
     def form_valid(self, form):
         self.object = form.save()
         send_register_email(self.object.email)
         return super().form_valid(form)
-
 
 
 class UserLoginView(LoginView):
@@ -37,8 +40,6 @@ class UserLoginView(LoginView):
     extra_context = {
         'title': 'Вход В аккаунт',
     }
-
-
 
 
 class UserProfileView(UpdateView):
@@ -66,14 +67,13 @@ class UserUpdateView(UpdateView):
         return self.request.user
 
 
-
-
-
 class UserLogoutView(LogoutView):
     template_name = 'users/user_logout.html'
     extra_context = {
         'title': 'Выход из аккаунта',
     }
+
+
 class UserChangePasswordView(PasswordChangeView):
     from_class = UserPasswordChangeForm
     template_name = 'users/user_change_password.html'
@@ -83,10 +83,22 @@ class UserChangePasswordView(PasswordChangeView):
     }
 
 
+class UserListView(LoginRequiredMixin, ListView):
+    model = User
+    extra_context = {
+        "title": "питомник все наши пользователи"
+    }
+    template_name = 'users/users.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(is_active = True)
+        return queryset
+
 def user_generate_new_passport_view(request):
     new_password = ''.join(random.sample((string.ascii_letters + string.digits), 12))
     request.user.set_password(new_password)
     request.user.save()
 
-    send_new_password(request.user.email,new_password)
+    send_new_password(request.user.email, new_password)
     return redirect(reverse('dogs:index'))

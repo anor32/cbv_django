@@ -37,6 +37,7 @@
                         {%if user.is_authenticated %}
 
                         <li><a href="{% url 'users:user_profile' %}" class="text-white">ваш профиль </a></li>
+                        <li><a href="{% url 'users:users_list' %}" class="text-white">все пользователи </a></li>
                         <span class="text-white"> {{user}}</span>
                              <form method="post" action="{%url 'users:user_logout'%}">
                                    {% csrf_token %}
