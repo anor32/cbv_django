@@ -134,7 +134,7 @@ class DogUpdateView(LoginRequiredMixin, UpdateView):
             'moderator':DogForm,
             'user':DogForm,
         }
-        user_role =self.request.user_role
+        user_role =self.request.user.role
         dog_form_class = dog_forms[user_role]
         return dog_form_class
 
