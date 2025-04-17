@@ -95,9 +95,9 @@ class DogDetailView(DetailView):
     context_object_name = 'object'
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context_data = super().get_context_data(**kwargs)
         dog_object = self.get_object()
-        context['title'] = f'вы выбрали {dog_object.name}, Порода {dog_object.breed.name}'
+        context_data['title'] = f'вы выбрали {dog_object.name}, Порода {dog_object.breed.name}'
         dog_object_increase = get_object_or_404(Dog, pk=dog_object.pk)
         if dog_object.owner != self.request.user:
             dog_object_increase.views_count()
@@ -106,7 +106,7 @@ class DogDetailView(DetailView):
             if dog_object_increase.views%20 == 0 and dog_object_increase != 0:
                  send_views_mail(dog_object_increase.name,dog_object_owner_email, dog_object_increase.views)
 
-        return context
+        return context_data
 
 
 
