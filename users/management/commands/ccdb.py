@@ -13,7 +13,7 @@ class Command(BaseCommand):
         try:
             conn = pyodbc.connect(conectString)
             conn.autocommit =True
-            conn.execute(f"CREATE DATABASE MyDjangoBase")
+            conn.execute(f"CREATE DATABASE {DATABASE}")
         except pyodbc.ProgrammingError as ex:
             print(ex)
         else:
