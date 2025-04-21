@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     #my app
     'users',
      'dogs',
+     'reviews',
 ]
 
 MIDDLEWARE = [
