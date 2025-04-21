@@ -1,9 +1,12 @@
+from tkinter.font import names
+
 from django.urls import path
 
 from users.apps import UsersConfig
 from users.forms import UserUpdateForm
 from users.views import (user_generate_new_passport_view, UserRegisterView, UserLoginView,
-                         UserProfileView, UserLogoutView, UserUpdateView, UserChangePasswordView, UserListView)
+                         UserProfileView, UserLogoutView, UserUpdateView, UserChangePasswordView, UserListView,
+                         UserDetailView)
 app_name = UsersConfig.name
 
 urlpatterns = [
@@ -15,6 +18,6 @@ urlpatterns = [
     path("change_password/",UserChangePasswordView.as_view(),name='user_change_password'),
     path('profile/genpassword/',user_generate_new_passport_view,name='user_generate_new_password'),
 
-    path("all_users/",UserListView.as_view(), name='users_list')
-
+    path("all_users/",UserListView.as_view(), name='users_list'),
+    path('profile/<int:pk>/detail', UserDetailView.as_view(), name ='user_detail')
 ]

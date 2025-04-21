@@ -10,7 +10,7 @@ from django.contrib.auth import authenticate, login, logout, user_logged_out, up
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.views import LoginView, PasswordChangeView, LogoutView
-from django.views.generic import CreateView, UpdateView, ListView
+from django.views.generic import CreateView, UpdateView, ListView, DetailView
 from django.urls import reverse_lazy
 
 from users.models import User
@@ -101,3 +101,14 @@ def user_generate_new_passport_view(request):
 
     send_new_password(request.user.email, new_password)
     return redirect(reverse('dogs:index'))
+
+
+class UserDetailView(DetailView):
+    model = User
+    template_name = 'users/user_detail.html'
+
+    def context_data(self, **kwargs):
+        context_data = super().get_context_data()
+        user_obj = self.get_object()
+        context_data['title'] =f"Профиль пользователя {user_obj}"
+        return context_data
