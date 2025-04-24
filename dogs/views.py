@@ -15,7 +15,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView, D
 
 from dogs.servises import send_views_mail
 from users.models import UserRoles
-
+from django.db.models import Q
 
 # Create your views here
 def index(request):
@@ -29,6 +29,7 @@ def index(request):
 class DogBreedListView(LoginRequiredMixin,ListView):
     model = Dog
     template_name = 'dogs/dogs.html'
+    paginate_by = 3
     extra_context = {
         'title': 'Cобаки выбранной породы'
     }
@@ -43,13 +44,14 @@ class BreedListView(LoginRequiredMixin,ListView):
         'title':"Все наши породы"
     }
     template_name = 'dogs/breeds.html'
-
+    paginate_by = 3
 
 class DogListView(ListView):
     model = Dog
     extra_context = {
-        'title': 'Питомник - Все наши породы'
+        'title': 'Питомник - Все наши собаки'
     }
+    paginate_by = 3
     template_name = 'dogs/dogs.html'
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -177,3 +179,43 @@ def toggle_activity(request, pk):
         dog_item.is_active = True
     dog_item.save()
     return redirect(reverse("dogs:dogs_list"))
+
+
+class DogSearchListView(LoginRequiredMixin, ListView):
+    model = Dog
+    template_name = 'dogs/dogs.html'
+    queryset = Dog.objects.filter(name__icontains='Пушок')
+    extra_context = {
+        'title': 'Результаты поискового запроса'
+    }
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+
+        object_list = Dog.objects.filter(
+            Q(name__icontains=query), is_active=True
+        )
+        return object_list
+
+
+class DogSearchList(LoginRequiredMixin, ListView):
+    model = Breed
+    template_name = 'dogs/dog_search_results.html'
+
+    extra_context = {
+        'title': 'Результаты поискового запроса'
+    }
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        print(Breed.objects.all())
+
+        object_list = Dog.objects.filter(
+                Q(name__icontains=query)
+            )
+        object_list_breed = Breed.objects.filter(
+                Q(name__icontains=query)
+            )
+        object_list  = list(object_list_breed) + list(object_list)
+
+        return object_list
+
+

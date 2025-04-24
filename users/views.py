@@ -83,6 +83,7 @@ class UserChangePasswordView(PasswordChangeView):
 
 
 class UserListView(LoginRequiredMixin, ListView):
+    paginate_by = 3
     model = User
     extra_context = {
         "title": "питомник все наши пользователи"
