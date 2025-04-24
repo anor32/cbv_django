@@ -1,0 +1,19 @@
+{%extends 'dogs/base.html' %}
+{% load my_tags %}
+{% block content %}
+
+<ul>
+  {% for object in object_list %}
+  <li>
+
+    {% if object.breed == null %}
+
+    {% include 'dogs/includes/inc_breed.html' with object=object %}
+    {% else %}
+
+     {% include 'dogs/includes/inc_dog_card.html' with object=object %}
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{%endblock%}
