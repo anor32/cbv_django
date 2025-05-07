@@ -21,7 +21,7 @@ from users.servises import send_new_password, send_register_email
 class UserRegisterView(CreateView):
     model = User
     form_class = UserRegisterForm
-    success_url = reverse_lazy('dogs:index')
+    success_url = reverse_lazy('users:user_login')
     template_name = 'users/user_register.html'
     extra_context = {
         'title': 'Создать аккаунт',

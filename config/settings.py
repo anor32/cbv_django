@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
-from django.conf.global_settings import CACHES
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -80,7 +79,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-load_dotenv()
 DRIVER = os.getenv('MS_SQL_DRIVER')
 SERVER = os.getenv('MS_SQL_SERVER')
 DATABASE = os.getenv('MS_SQL_DATABASE')
