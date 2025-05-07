@@ -26,7 +26,7 @@ def index(request):
     return render(request, "dogs/index.html", context)
 
 
-class DogBreedListView(LoginRequiredMixin,ListView):
+class DogBreedListView(ListView):
     model = Dog
     template_name = 'dogs/dogs.html'
     paginate_by = 3
@@ -38,7 +38,7 @@ class DogBreedListView(LoginRequiredMixin,ListView):
         return queryset
 
 
-class BreedListView(LoginRequiredMixin,ListView):
+class BreedListView(ListView):
     model = Breed
     extra_context = {
         'title':"Все наши породы"
