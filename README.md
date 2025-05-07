@@ -69,5 +69,5 @@ python manage.py runserver
 ссdb - для создания базы
 ссsu - Для пользователей user moderaror admin
 test_mail - для проверки отправки писем 
-находятся в приложении users managment
+находятся в приложение users managment
 

@@ -1,8 +1,9 @@
+from tkinter.font import names
 
 from django.urls import path
 
 from users.apps import UsersConfig
-
+from users.forms import UserUpdateForm
 from users.views import (user_generate_new_passport_view, UserRegisterView, UserLoginView,
                          UserProfileView, UserLogoutView, UserUpdateView, UserChangePasswordView, UserListView,
                          UserDetailView)
@@ -10,7 +11,7 @@ app_name = UsersConfig.name
 
 urlpatterns = [
     path("register/", UserRegisterView.as_view(), name="user_register"),
-    path("user_login/", UserLoginView.as_view(), name="user_login"),
+    path("user_login", UserLoginView.as_view(), name="user_login"),
     path("profile/", UserProfileView.as_view()  , name="user_profile"),
     path('logout', UserLogoutView.as_view(), name='user_logout', ),
     path('update/', UserUpdateView.as_view(), name= 'user_update',),
